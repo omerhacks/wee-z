@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel</title>
+  <title>Admin Login</title>
 </head>
 <body>
 
-<h1>Admin Panel</h1>
+<h2>Admin Login</h2>
 
-<input type="text" id="name" placeholder="Item name"><br><br>
-<input type="number" id="price" placeholder="Price"><br><br>
-<input type="text" id="category" placeholder="Category"><br><br>
-<input type="text" id="image" placeholder="Image path (/images/...)"><br><br>
+<input id="username" placeholder="Username"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
 
-<button onclick="addItem()">Add Item</button>
+<button onclick="login()">Login</button>
 
 <script>
-async function addItem() {
-  const item = {
-    name: document.getElementById("name").value,
-    price: parseInt(document.getElementById("price").value),
-    category: document.getElementById("category").value,
-    image: document.getElementById("image").value
-  };
-
-  await fetch('/add-item', {
+async function login() {
+  const res = await fetch('/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(item)
+    body: JSON.stringify({
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    })
   });
 
-  alert("Item added!");
+  const data = await res.json();
+
+  if (data.success) {
+    localStorage.setItem("admin", "true");
+    window.location.href = "/dashboard.html";
+  } else {
+    alert("Invalid login");
+  }
 }
 </script>
 
