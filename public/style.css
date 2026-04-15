@@ -3,61 +3,63 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* BODY */
 body {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: #fff;
-  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f2ff, #ffffff);
+  color: #111;
 }
 
-/* CONTAINER */
-.container {
-  padding: 20px;
+/* NAVBAR */
+.navbar {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-/* HEADER */
-.header {
-  text-align: center;
-  margin-bottom: 25px;
+/* HERO */
+.hero {
+  padding: 100px 20px 40px;
 }
 
-.header h1 {
-  font-size: 2rem;
+.hero-title {
+  font-size: 2.5rem;
   font-weight: bold;
 }
 
-/* GLASS CARD BASE */
-.glass {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 15px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+.hero-title em {
+  color: #3b82f6;
 }
 
 /* MENU GRID */
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
+  padding: 20px;
 }
 
-/* MENU CARD */
+/* GLASS CARD */
 .menu-card {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 15px;
   padding: 15px;
   transition: 0.3s;
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
 .menu-card:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-5px);
 }
 
 /* IMAGE */
-.menu-card img {
+.card-img-wrap img {
   width: 100%;
   height: 180px;
   object-fit: cover;
@@ -65,117 +67,85 @@ body {
 }
 
 /* TEXT */
-.menu-card h3 {
+.card-name {
+  font-size: 18px;
+  font-weight: bold;
   margin-top: 10px;
-  font-size: 1.2rem;
 }
 
-.menu-card p {
-  font-size: 0.9rem;
-  color: #cbd5f5;
-  margin: 5px 0;
+.card-desc {
+  font-size: 14px;
+  color: #555;
 }
 
-.price {
+.card-price {
   font-weight: bold;
   margin-top: 5px;
 }
 
 /* BUTTON */
-.btn {
-  display: inline-block;
-  margin-top: 10px;
+.add-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
   padding: 8px 12px;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  background: rgba(59,130,246,0.8);
-  color: white;
-  transition: 0.2s;
-}
-
-.btn:hover {
-  background: rgba(59,130,246,1);
-}
-
-/* CATEGORY FILTER */
-.categories {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  justify-content: center;
-}
-
-.category-btn {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: white;
   cursor: pointer;
 }
 
-.category-btn.active,
-.category-btn:hover {
-  background: rgba(59,130,246,0.9);
+.add-btn:hover {
+  background: #2563eb;
 }
 
-/* ORDER MODAL */
-.modal {
+/* CART FIX (IMPORTANT) */
+.cart-sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 350px;
+  height: 100%;
+  background: white;
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: 0.3s;
+}
+
+.cart-sidebar.open {
+  transform: translateX(0);
+}
+
+/* MODAL FIX (THIS WAS YOUR MAIN BUG) */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  background: rgba(0,0,0,0.5);
 }
 
-.modal-content {
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: white;
   padding: 20px;
+  border-radius: 12px;
   width: 90%;
   max-width: 400px;
 }
 
-/* INPUTS */
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  background: rgba(255,255,255,0.1);
-  color: white;
-}
-
-/* MOBILE RESPONSIVE */
+/* MOBILE */
 @media (max-width: 768px) {
-  .header h1 {
-    font-size: 1.5rem;
+  .hero-title {
+    font-size: 1.8rem;
   }
 
-  .menu-card img {
-    height: 150px;
-  }
-
-  .menu-card {
-    padding: 12px;
-  }
-}
-
-/* SMALL MOBILE */
-@media (max-width: 480px) {
   .menu-grid {
     grid-template-columns: 1fr;
-  }
-
-  .categories {
-    flex-direction: column;
-    align-items: stretch;
   }
 }
