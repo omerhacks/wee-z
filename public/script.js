@@ -437,6 +437,23 @@ function showToast(msg, type = 'default') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.textContent = msg;
+  function checkDeliveryTime() {
+  const now = new Date();
+
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+
+  // Convert to total minutes
+  const currentTime = hours * 60 + minutes;
+  const cutoffTime = 22 * 60 + 30; // 10:30 PM
+
+  if (currentTime >= cutoffTime) {
+    alert("⚠️ Delivery is not available after 10:30 PM. Please choose pickup.");
+  }
+}
+
+// Run on page load
+window.addEventListener("load", checkDeliveryTime);
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3200);
 }
