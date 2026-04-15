@@ -1,98 +1,130 @@
 [
   {
     "id": 1,
-    "name": "Dynamite Chicken",
-    "price": 997,
-    "category": "Appetizers",
-    "description": "Tempura fried chicken with dynamite sauce",
-    "image": "https://source.unsplash.com/600x400/?fried-chicken,tempura"
+    "name": "Chicken Karahi",
+    "price": 850,
+    "category": "Main Course",
+    "description": "Tender chicken cooked in a spicy tomato-based gravy with fresh ginger and green chilies",
+    "image": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop"
   },
   {
     "id": 2,
-    "name": "Loaded Fries",
-    "price": 1147,
-    "category": "Appetizers",
-    "description": "Fries with cheese, jalapenos, and sauce",
-    "image": "https://source.unsplash.com/600x400/?loaded-fries,cheese-fries"
+    "name": "Mutton Karahi",
+    "price": 1200,
+    "category": "Main Course",
+    "description": "Slow-cooked mutton in our signature karahi masala with desi ghee",
+    "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop"
   },
   {
     "id": 3,
-    "name": "Greek Salad",
-    "price": 1147,
-    "category": "Salads",
-    "description": "Fresh vegetables, olives, feta cheese",
-    "image": "https://source.unsplash.com/600x400/?greek-salad,feta"
+    "name": "Beef Nihari",
+    "price": 750,
+    "category": "Main Course",
+    "description": "Slow-cooked beef shank in aromatic nihari spices, a Lahori breakfast classic",
+    "image": "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop"
   },
   {
     "id": 4,
-    "name": "Chicken Alfredo Pasta",
-    "price": 1247,
-    "category": "Pasta",
-    "description": "Creamy pasta with grilled chicken",
-    "image": "https://source.unsplash.com/600x400/?chicken-alfredo,pasta"
+    "name": "Daal Makhani",
+    "price": 450,
+    "category": "Main Course",
+    "description": "Black lentils slow-cooked overnight with butter, cream and spices",
+    "image": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092"
   },
   {
     "id": 5,
-    "name": "Chicken Souvlaki Wrap",
-    "price": 1097,
-    "category": "Wraps",
-    "description": "Grilled chicken with pita and sauce",
-    "image": "https://source.unsplash.com/600x400/?chicken-wrap,pita"
+    "name": "Chicken Biryani",
+    "price": 650,
+    "category": "Rice",
+    "description": "Fragrant basmati rice layered with spiced chicken and fried onions",
+    "image": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=300&fit=crop"
   },
   {
     "id": 6,
-    "name": "Chicken Parmesan",
-    "price": 1497,
-    "category": "Chicken",
-    "description": "Fried chicken with cheese and sauce",
-    "image": "https://source.unsplash.com/600x400/?chicken-parmesan"
+    "name": "Mutton Pulao",
+    "price": 900,
+    "category": "Rice",
+    "description": "Aromatic rice slow-cooked with tender mutton and whole spices",
+    "image": "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&h=300&fit=crop"
   },
   {
     "id": 7,
-    "name": "Grilled Tarragon Chicken",
-    "price": 1397,
-    "category": "Grilled",
-    "description": "Grilled chicken with herbs",
-    "image": "https://source.unsplash.com/600x400/?grilled-chicken,herbs"
+    "name": "Chicken Tikka",
+    "price": 700,
+    "category": "BBQ & Grills",
+    "description": "Marinated chicken pieces grilled on charcoal, served with mint chutney",
+    "image": "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=300&fit=crop"
   },
   {
     "id": 8,
-    "name": "Chicken Cashew Nuts",
-    "price": 1497,
-    "category": "Pan Asian",
-    "description": "Chicken with cashew nuts and vegetables",
-    "image": "https://source.unsplash.com/600x400/?chicken-cashew"
+    "name": "Seekh Kabab",
+    "price": 600,
+    "category": "BBQ & Grills",
+    "description": "Minced beef seekh kababs grilled on skewers with herbs and spices",
+    "image": "https://images.unsplash.com/photo-1558030006-450675393462?w=400&h=300&fit=crop"
   },
   {
     "id": 9,
-    "name": "Club Sandwich",
-    "price": 1247,
-    "category": "Burgers",
-    "description": "Grilled sandwich with chicken and egg",
-    "image": "https://source.unsplash.com/600x400/?club-sandwich"
+    "name": "Tandoori Naan",
+    "price": 60,
+    "category": "Breads",
+    "description": "Freshly baked naan in traditional clay tandoor oven",
+    "image": "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop"
   },
   {
     "id": 10,
-    "name": "Chicken Quesadilla",
-    "price": 1547,
-    "category": "Mexican",
-    "description": "Tortilla filled with chicken and cheese",
-    "image": "https://source.unsplash.com/600x400/?quesadilla,chicken"
+    "name": "Garlic Naan",
+    "price": 80,
+    "category": "Breads",
+    "description": "Tandoori naan brushed with garlic butter and fresh coriander",
+    "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop"
   },
   {
     "id": 11,
-    "name": "Pepperoni Pizza",
-    "price": 1397,
-    "category": "Pizza",
-    "description": "Thin crust pizza with pepperoni",
-    "image": "https://source.unsplash.com/600x400/?pepperoni-pizza"
+    "name": "Mango Lassi",
+    "price": 250,
+    "category": "Beverages",
+    "description": "Chilled yogurt drink blended with fresh Sindhi mangoes",
+    "image": "https://images.unsplash.com/photo-1527482797697-8795b05a13fe?w=400&h=300&fit=crop"
   },
   {
     "id": 12,
-    "name": "Chocolate Cheesecake",
-    "price": 999,
+    "name": "Fresh Lime Soda",
+    "price": 150,
+    "category": "Beverages",
+    "description": "Freshly squeezed lime with sparkling water, sweet or salted",
+    "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop"
+  },
+  {
+    "id": 13,
+    "name": "Gulab Jamun",
+    "price": 200,
     "category": "Desserts",
-    "description": "Creamy chocolate cheesecake",
-    "image": "https://source.unsplash.com/600x400/?chocolate-cheesecake"
+    "description": "Soft milk-solid dumplings soaked in rose-flavored sugar syrup (4 pieces)",
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop"
+  },
+  {
+    "id": 14,
+    "name": "Kheer",
+    "price": 220,
+    "category": "Desserts",
+    "description": "Creamy rice pudding with cardamom, saffron and topped with pistachios",
+    "image": "https://images.unsplash.com/photo-1631452180519-cf57d83031cf?w=400&h=300&fit=crop"
+  },
+  {
+    "id": 15,
+    "name": "Chicken Shawarma",
+    "price": 350,
+    "category": "Snacks & Rolls",
+    "description": "Grilled chicken wrapped in flatbread with garlic sauce and fresh veggies",
+    "image": "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400&h=300&fit=crop"
+  },
+  {
+    "id": 16,
+    "name": "Samosa Chaat",
+    "price": 180,
+    "category": "Snacks & Rolls",
+    "description": "Crispy samosas topped with yogurt, tamarind chutney and chaat masala",
+    "image": "https://images.unsplash.com/photo-1601050690117-94f5f7a25b16?w=400&h=300&fit=crop"
   }
 ]
