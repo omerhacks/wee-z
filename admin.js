@@ -390,3 +390,18 @@ function showAlert(msg, type = 'default') {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+app.use(express.json());
+
+app.post('/add-item', (req, res) => {
+  const menu = readJSON(MENU_FILE);
+
+  const newItem = {
+    id: menu.length + 1,
+    ...req.body
+  };
+
+  menu.push(newItem);
+  writeJSON(MENU_FILE, menu);
+
+  res.json({ success: true });
+});
