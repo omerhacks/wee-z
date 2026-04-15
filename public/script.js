@@ -1,6 +1,6 @@
 // ✅ YOUR MENU DATA
 const menu = [
-  { id: 3, name: "Beef Nihari", price: 750, category: "Main Course", description: "Slow-cooked beef nihari", image: "/images/beefnihari.jpeg" },
+  { id: 3, name: "Beef Nihari", price: 750, category: "Main Course", description: "Slow-cooked beef nihari", image: "/images/nihari.jpeg" },
   { id: 4, name: "Daal Makhani", price: 450, category: "Main Course", description: "Creamy black lentils", image: "/images/daalmakhni.jpeg" },
   { id: 6, name: "Mutton Pulao", price: 900, category: "Rice", description: "Rice cooked with mutton", image: "/images/Mutton-Pulao.jpeg" },
   { id: 8, name: "Seekh Kabab", price: 600, category: "BBQ & Grills", description: "Minced kababs", image: "/images/seekh-kebab.jpeg" },
