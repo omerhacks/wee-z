@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — Wee'z Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css">
+
+<body>
+
+<!-- ═══════════════════ LOGIN SCREEN ═══════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🍛</div>
+    <h1 class="login-title">Wee'z Kitchen</h1>
+    <p class="login-sub">Admin Panel</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
+    </div>
+    <div id="loginError" class="login-error" style="display:none">❌ Invalid username or password</div>
+    <button class="login-btn" onclick="doLogin()">Login →</button>
+    <a href="/" class="back-link">← Back to Website</a>
+  </div>
+</div>
+
+<!-- ═══════════════════ ADMIN APP ═══════════════════ -->
+<div id="adminApp" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span>🍛</span>
+      <div>
+        <div class="sb-title">Wee'z Kitchen</div>
+        <div class="sb-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showTab('orders', this)">
+        <span>📦</span> Orders
+      </button>
+      <button class="nav-item" onclick="showTab('menu', this)">
+        <span>🍽️</span> Menu Items
+      </button>
+      <button class="nav-item" onclick="showTab('addItem', this)">
+        <span>➕</span> Add Item
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="nav-item">← Live Site</a>
+      <button class="nav-item logout" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ─── ORDERS TAB ─── -->
+    <div id="tab-orders" class="tab-content active">
+      <div class="page-header">
+        <h2>📦 All Orders</h2>
+        <button class="refresh-btn" onclick="loadOrders()">↻ Refresh</button>
+      </div>
+      <div id="ordersContainer">
+        <div class="loading-msg">Loading orders...</div>
+      </div>
+    </div>
+
+    <!-- ─── MENU TAB ─── -->
+    <div id="tab-menu" class="tab-content">
+      <div class="page-header">
+        <h2>🍽️ Menu Items</h2>
+        <button class="refresh-btn" onclick="loadMenuAdmin()">↻ Refresh</button>
+      </div>
+      <div id="menuAdminContainer">
+        <div class="loading-msg">Loading menu...</div>
+      </div>
+    </div>
+
+    <!-- ─── ADD ITEM TAB ─── -->
+    <div id="tab-addItem" class="tab-content">
+      <div class="page-header"><h2>➕ Add Menu Item</h2></div>
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Item Name *</label>
+            <input type="text" id="aiName" placeholder="e.g. Chicken Karahi" />
+          </div>
+          <div class="form-group">
+            <label>Price (Rs.) *</label>
+            <input type="number" id="aiPrice" placeholder="e.g. 850" />
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <input type="text" id="aiCategory" placeholder="e.g. Main Course" />
+          </div>
+          <div class="form-group full">
+            <label>Description</label>
+            <textarea id="aiDesc" placeholder="Short description of the dish..." rows="2"></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Image URL</label>
+            <input type="url" id="aiImage" placeholder="https://... (Unsplash link recommended)" />
+          </div>
+        </div>
+        <!-- Preview -->
+        <div class="img-preview-wrap">
+          <label>Image Preview</label>
+          <img id="aiPreview" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop"
+               alt="Preview" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop'" />
+          <button type="button" class="preview-btn" onclick="previewImage()">Preview Image</button>
+        </div>
+        <div id="addItemMsg" class="result-msg" style="display:none"></div>
+        <button class="submit-btn" onclick="addMenuItem()">+ Add to Menu</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── EDIT ITEM MODAL ─── -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>✏️ Edit Menu Item</h3>
+      <button class="close-x" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-bdy">
+      <input type="hidden" id="editId" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="editName" />
+        </div>
+        <div class="form-group">
+          <label>Price (Rs.) *</label>
+          <input type="number" id="editPrice" />
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <input type="text" id="editCategory" />
+        </div>
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea id="editDesc" rows="2"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Image URL</label>
+          <input type="url" id="editImage" />
+        </div>
+      </div>
+      <div id="editMsg" class="result-msg" style="display:none"></div>
+      <div style="display:flex;gap:12px;margin-top:16px">
+        <button class="submit-btn" onclick="saveEdit()">💾 Save Changes</button>
+        <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
