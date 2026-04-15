@@ -9,13 +9,13 @@ function checkDeliveryTime() {
   const deliveryLabel = document.getElementById("lblDelivery");
 
   if (currentTime >= cutoffTime) {
-    // Disable delivery
+    // Disable delivery radio button
     if (deliveryOption) {
       deliveryOption.disabled = true;
       deliveryOption.checked = false;
     }
 
-    // Style disabled
+    // Grey out UI
     if (deliveryLabel) {
       deliveryLabel.style.opacity = "0.5";
       deliveryLabel.style.pointerEvents = "none";
@@ -26,15 +26,9 @@ function checkDeliveryTime() {
       pickupOption.checked = true;
     }
 
-    // Update UI if function exists
+    // Update UI (your existing function)
     if (typeof onOrderTypeChange === "function") {
       onOrderTypeChange();
-    }
-
-    // Show alert once
-    if (!window.deliveryAlertShown) {
-      alert("⚠️ Delivery is closed after 10:30 PM. Please choose pickup.");
-      window.deliveryAlertShown = true;
     }
   }
 }
@@ -42,14 +36,13 @@ function checkDeliveryTime() {
 // Run on page load
 window.addEventListener("load", checkDeliveryTime);
 
-// Hook into checkout
+// Also run when checkout opens
 const originalOpenCheckout = window.openCheckout;
 
 window.openCheckout = function () {
   if (originalOpenCheckout) {
     originalOpenCheckout();
   }
-
   checkDeliveryTime();
 };
 </script>
