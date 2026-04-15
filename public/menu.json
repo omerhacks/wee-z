@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Dynamite Chicken",
+    "price": 997,
+    "category": "Appetizers",
+    "description": "Tempura fried chicken with dynamite sauce",
+    "image": "https://images.unsplash.com/photo-1604908176997-431fa9cdb82b"
+  },
+  {
+    "id": 2,
+    "name": "Loaded Fries",
+    "price": 1147,
+    "category": "Appetizers",
+    "description": "Fries with cheese, jalapenos, and sauce",
+    "image": "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5"
+  },
+  {
+    "id": 3,
+    "name": "Greek Salad",
+    "price": 1147,
+    "category": "Salads",
+    "description": "Fresh vegetables, olives, feta cheese",
+    "image": "https://images.unsplash.com/photo-1568600891621-50f6972f6f01"
+  },
+  {
+    "id": 4,
+    "name": "Chicken Alfredo Pasta",
+    "price": 1247,
+    "category": "Pasta",
+    "description": "Creamy pasta with grilled chicken",
+    "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b"
+  },
+  {
+    "id": 5,
+    "name": "Chicken Souvlaki Wrap",
+    "price": 1097,
+    "category": "Wraps",
+    "description": "Grilled chicken with pita and sauce",
+    "image": "https://images.unsplash.com/photo-1550547660-d9450f859349"
+  },
+  {
+    "id": 6,
+    "name": "Chicken Parmesan",
+    "price": 1497,
+    "category": "Chicken",
+    "description": "Fried chicken with cheese and sauce",
+    "image": "https://images.unsplash.com/photo-1604908177225-4d8b5d9d3c0b"
+  },
+  {
+    "id": 7,
+    "name": "Grilled Tarragon Chicken",
+    "price": 1397,
+    "category": "Grilled",
+    "description": "Grilled chicken with herbs",
+    "image": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092"
+  },
+  {
+    "id": 8,
+    "name": "Chicken Cashew Nuts",
+    "price": 1497,
+    "category": "Pan Asian",
+    "description": "Chicken with cashew nuts and vegetables",
+    "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b"
+  },
+  {
+    "id": 9,
+    "name": "Club Sandwich",
+    "price": 1247,
+    "category": "Burgers",
+    "description": "Grilled sandwich with chicken and egg",
+    "image": "https://images.unsplash.com/photo-1550547660-d9450f859349"
+  },
+  {
+    "id": 10,
+    "name": "Chicken Quesadilla",
+    "price": 1547,
+    "category": "Mexican",
+    "description": "Tortilla filled with chicken and cheese",
+    "image": "https://images.unsplash.com/photo-1617191518508-3f5c9b8c3c0c"
+  },
+  {
+    "id": 11,
+    "name": "Pepperoni Pizza",
+    "price": 1397,
+    "category": "Pizza",
+    "description": "Thin crust pizza with pepperoni",
+    "image": "https://images.unsplash.com/photo-1548365328-9f547fb0953c"
+  },
+  {
+    "id": 12,
+    "name": "Chocolate Cheesecake",
+    "price": 999,
+    "category": "Desserts",
+    "description": "Creamy chocolate cheesecake",
+    "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b"
+  }
+]
