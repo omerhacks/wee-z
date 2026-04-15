@@ -104,3 +104,6 @@ body {
   padding: 20px;
   text-align: center;
 }
+#checkoutOverlay {
+  display: none;
+}
