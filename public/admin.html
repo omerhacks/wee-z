@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+
+<h1>Admin Panel</h1>
+
+<input type="text" id="name" placeholder="Item name"><br><br>
+<input type="number" id="price" placeholder="Price"><br><br>
+<input type="text" id="category" placeholder="Category"><br><br>
+<input type="text" id="image" placeholder="Image path (/images/...)"><br><br>
+
+<button onclick="addItem()">Add Item</button>
+
+<script>
+async function addItem() {
+  const item = {
+    name: document.getElementById("name").value,
+    price: parseInt(document.getElementById("price").value),
+    category: document.getElementById("category").value,
+    image: document.getElementById("image").value
+  };
+
+  await fetch('/add-item', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(item)
+  });
+
+  alert("Item added!");
+}
+</script>
+
+</body>
+</html>
