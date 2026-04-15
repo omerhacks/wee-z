@@ -1,33 +1,36 @@
-async function loadMenu() {
-  const grid = document.getElementById('menuGrid');
+// ================= CART =================
+function toggleCart() {
+  document.getElementById("cartOverlay").classList.toggle("open");
+  document.getElementById("cartSidebar").classList.toggle("open");
+}
 
-  try {
-    const res = await fetch('/menu');
-    const data = await res.json();
+// ================= MODAL (FIXED) =================
+function openCheckout() {
+  document.getElementById("checkoutOverlay").classList.add("open");
+}
 
-    grid.innerHTML = '';
+function closeCheckout() {
+  document.getElementById("checkoutOverlay").classList.remove("open");
+}
 
-    data.data.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'menu-card';
+// Close when clicking outside
+document.getElementById("checkoutOverlay").addEventListener("click", function(e) {
+  if (e.target === this) {
+    closeCheckout();
+  }
+});
 
-      card.innerHTML = `
-        <img src="${item.image}" />
-        <div class="menu-card-body">
-          <h4>${item.name}</h4>
-          <p>${item.description}</p>
-          <strong>Rs. ${item.price}</strong>
-          <br/>
-          <button>Add</button>
-        </div>
-      `;
+// ================= DELIVERY TIME =================
+function checkDeliveryTime() {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  const cutoff = 22 * 60 + 30;
 
-      grid.appendChild(card);
-    });
+  const delivery = document.querySelector('input[value="delivery"]');
 
-  } catch (e) {
-    grid.innerHTML = "Failed to load menu";
+  if (delivery && currentTime >= cutoff) {
+    delivery.disabled = true;
   }
 }
 
-window.onload = loadMenu;
+window.addEventListener("load", checkDeliveryTime);
