@@ -1,21 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Chicken Karahi",
-    "price": 850,
-    "category": "Main Course",
-    "description": "Tender chicken cooked in a spicy tomato-based gravy",
-    "image": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398"
-  },
-  {
-    "id": 2,
-    "name": "Mutton Karahi",
-    "price": 1200,
-    "category": "Main Course",
-    "description": "Slow-cooked mutton in karahi masala",
-    "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe"
-  },
-  {
     "id": 3,
     "name": "Beef Nihari",
     "price": 750,
@@ -32,28 +16,12 @@
     "image": "/images/daalmakhni.jpeg"
   },
   {
-    "id": 5,
-    "name": "Chicken Biryani",
-    "price": 650,
-    "category": "Rice",
-    "description": "Spiced rice with chicken",
-    "image": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8"
-  },
-  {
     "id": 6,
     "name": "Mutton Pulao",
     "price": 900,
     "category": "Rice",
     "description": "Rice cooked with mutton",
     "image": "/images/Mutton-Pulao.jpeg"
-  },
-  {
-    "id": 7,
-    "name": "Chicken Tikka",
-    "price": 700,
-    "category": "BBQ & Grills",
-    "description": "Grilled chicken tikka",
-    "image": "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0"
   },
   {
     "id": 8,
@@ -72,28 +40,12 @@
     "image": "/images/tandoori-naan.jpeg"
   },
   {
-    "id": 10,
-    "name": "Garlic Naan",
-    "price": 80,
-    "category": "Breads",
-    "description": "Garlic naan",
-    "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641"
-  },
-  {
     "id": 11,
     "name": "Meethi Lassi",
     "price": 250,
     "category": "Beverages",
     "description": "Sweet yogurt drink",
     "image": "/images/lassi.jpeg"
-  },
-  {
-    "id": 12,
-    "name": "Fresh Lime Soda",
-    "price": 150,
-    "category": "Beverages",
-    "description": "Lime soda",
-    "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc"
   },
   {
     "id": 13,
@@ -110,14 +62,6 @@
     "category": "Desserts",
     "description": "Rice pudding",
     "image": "/images/kheer.jpeg"
-  },
-  {
-    "id": 15,
-    "name": "Chicken Shawarma",
-    "price": 350,
-    "category": "Snacks & Rolls",
-    "description": "Chicken wrap",
-    "image": "https://images.unsplash.com/photo-1561651823-34feb02250e4"
   },
   {
     "id": 16,
