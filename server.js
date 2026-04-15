@@ -19,6 +19,7 @@ const ORDERS_FILE = path.join(__dirname, 'orders.json');
 app.use(express.json({ limit: '10mb' }));           // Parse JSON bodies (supports base64 screenshots)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public'))); // Serve frontend files
+app.use(express.static('public'));
 
 // ─── Admin Credentials (hardcoded for simplicity — change these!) ─────────
 const ADMIN_USERNAME = 'admin';
