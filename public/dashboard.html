@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<button onclick="loadMenu()">Load Menu</button>
+<div id="menu"></div>
+
+<script>
+if (!localStorage.getItem("admin")) {
+  window.location.href = "/admin.html";
+}
+
+async function loadMenu() {
+  const res = await fetch('/menu');
+  const data = await res.json();
+
+  let html = "";
+  data.forEach(item => {
+    html += `
+      <div>
+        <b>${item.name}</b> - Rs ${item.price}
+        <button onclick="deleteItem(${item.id})">Delete</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("menu").innerHTML = html;
+}
+
+async function deleteItem(id) {
+  await fetch('/delete/' + id, { method: 'DELETE' });
+  loadMenu();
+}
+</script>
+
+</body>
+</html>
