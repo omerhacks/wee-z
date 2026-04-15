@@ -908,8 +908,8 @@ body {
 /* ===== BUTTON ===== */
 .add-btn {
     background: #ff4d4d;
-    color: white;
-    border: none;
+    color: black;
+    border: white;
     padding: 8px 12px;
     border-radius: 6px;
     cursor: pointer;
