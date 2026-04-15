@@ -457,3 +457,25 @@ window.addEventListener("load", checkDeliveryTime);
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3200);
 }
+function disableDeliveryIfLate() {
+  // Pakistan time fix (important for Render)
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Karachi" }));
+
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  const cutoffTime = 22 * 60 + 30; // 10:30 PM
+
+  if (currentTime >= cutoffTime) {
+    const deliveryOption = document.querySelector('input[value="delivery"]');
+    const pickupOption = document.querySelector('input[value="pickup"]');
+
+    if (deliveryOption) {
+      deliveryOption.disabled = true;
+
+      // Force pickup selected
+      if (pickupOption) pickupOption.checked = true;
+    }
+  }
+}
+
+// run when page loads
+window.addEventListener("load", disableDeliveryIfLate);
