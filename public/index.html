@@ -2,32 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wee'z Kitchen — Authentic Pakistani Cuisine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wee'z Kitchen</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- ✅ FIX: modal hidden + proper layering -->
-  <style>
-    #checkoutOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    #checkoutOverlay.active {
-      display: flex;
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
@@ -36,61 +15,74 @@
 <nav class="navbar">
   <div class="nav-inner">
     <div class="nav-brand">🍛 Wee'z Kitchen</div>
-    <button onclick="toggleCart()">Cart</button>
+    <button class="cart-btn" onclick="toggleCart()">🛒 Cart</button>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <h1>Flavours That Tell Stories</h1>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Flavours That Tell Stories</h1>
+    <p class="hero-desc">Authentic Pakistani Food</p>
+  </div>
 </section>
 
 <!-- MENU -->
-<section id="menu-section">
-  <h2>Menu</h2>
-  <div id="menuGrid"></div>
+<section class="menu-section">
+  <div class="container">
+    <h2 class="section-title">Menu</h2>
+    <div id="menuGrid" class="menu-grid"></div>
+  </div>
 </section>
 
 <!-- CART -->
-<div id="cartOverlay" onclick="toggleCart()"></div>
-<aside id="cartSidebar">
-  <h3>Your Order</h3>
-  <button onclick="openCheckout()">Checkout</button>
+<div id="cartOverlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+<aside id="cartSidebar" class="cart-sidebar">
+  <div class="cart-header">
+    <h3>Your Order</h3>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+
+  <div id="cartItems" class="cart-items"></div>
+
+  <div class="cart-footer">
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
+  </div>
 </aside>
 
-<!-- ✅ CHECKOUT MODAL (FIXED) -->
-<div id="checkoutOverlay">
+<!-- ✅ CHECKOUT MODAL (IMPORTANT: NO INLINE STYLE) -->
+<div class="modal-overlay" id="checkoutOverlay">
   <div class="modal">
-    <h3>Complete Order</h3>
+    <div class="modal-header">
+      <h3>Complete Order</h3>
+      <button class="close-btn" onclick="closeCheckout()">✕</button>
+    </div>
 
-    <input type="text" placeholder="Name" />
-    <input type="tel" placeholder="Phone" />
+    <div class="modal-body">
+      <input type="text" placeholder="Name" />
+      <input type="tel" placeholder="Phone" />
 
-    <h4>Order Type</h4>
-    <label><input type="radio" name="orderType" value="pickup" checked> Pickup</label>
-    <label id="lblDelivery"><input type="radio" name="orderType" value="delivery"> Delivery</label>
+      <h4>Order Type</h4>
+      <label>
+        <input type="radio" name="orderType" value="pickup" checked>
+        Pickup
+      </label>
 
-    <textarea placeholder="Address"></textarea>
+      <label id="lblDelivery">
+        <input type="radio" name="orderType" value="delivery">
+        Delivery
+      </label>
 
-    <button onclick="closeCheckout()">Close</button>
+      <textarea placeholder="Address"></textarea>
+
+      <button onclick="closeCheckout()">Close</button>
+    </div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>© Wee'z Kitchen</footer>
-
 <script src="script.js"></script>
-
-<!-- ✅ FIXED JS -->
-<script>
-function openCheckout() {
-  document.getElementById("checkoutOverlay").classList.add("active");
-}
-
-function closeCheckout() {
-  document.getElementById("checkoutOverlay").classList.remove("active");
-}
-</script>
 
 </body>
 </html>
