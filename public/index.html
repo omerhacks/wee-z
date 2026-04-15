@@ -9,82 +9,87 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 
-  <!-- 🔥 FIX: Hide modal by default -->
+  <!-- ✅ FIX: modal hidden + proper layering -->
   <style>
     #checkoutOverlay {
       display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    #checkoutOverlay.active {
+      display: flex;
+      z-index: 9999;
       align-items: center;
       justify-content: center;
-    }
-
-    /* 🔥 Smooth modal animation (Foodpanda style) */
-    .modal {
-      transform: translateY(30px);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-
-    #checkoutOverlay.active .modal {
-      transform: translateY(0);
-      opacity: 1;
     }
   </style>
 </head>
 
 <body>
 
-<!-- KEEP ALL YOUR ORIGINAL CONTENT SAME -->
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">🍛 Wee'z Kitchen</div>
+    <button onclick="toggleCart()">Cart</button>
+  </div>
+</nav>
 
-<!-- (I AM NOT TOUCHING YOUR STRUCTURE — ONLY FIX BELOW) -->
+<!-- HERO -->
+<section class="hero">
+  <h1>Flavours That Tell Stories</h1>
+</section>
 
-<!-- ═══════════════════ CHECKOUT MODAL ═══════════════════ -->
-<div class="modal-overlay" id="checkoutOverlay">
-  <div class="modal" id="checkoutModal">
-    <div class="modal-header">
-      <h3>🧾 Complete Your Order</h3>
-      <button class="close-btn" onclick="closeCheckout()">✕</button>
-    </div>
-    <div class="modal-body">
+<!-- MENU -->
+<section id="menu-section">
+  <h2>Menu</h2>
+  <div id="menuGrid"></div>
+</section>
 
-      <!-- (ALL YOUR EXISTING CONTENT REMAINS SAME HERE) -->
+<!-- CART -->
+<div id="cartOverlay" onclick="toggleCart()"></div>
+<aside id="cartSidebar">
+  <h3>Your Order</h3>
+  <button onclick="openCheckout()">Checkout</button>
+</aside>
 
-    </div>
+<!-- ✅ CHECKOUT MODAL (FIXED) -->
+<div id="checkoutOverlay">
+  <div class="modal">
+    <h3>Complete Order</h3>
+
+    <input type="text" placeholder="Name" />
+    <input type="tel" placeholder="Phone" />
+
+    <h4>Order Type</h4>
+    <label><input type="radio" name="orderType" value="pickup" checked> Pickup</label>
+    <label id="lblDelivery"><input type="radio" name="orderType" value="delivery"> Delivery</label>
+
+    <textarea placeholder="Address"></textarea>
+
+    <button onclick="closeCheckout()">Close</button>
   </div>
 </div>
 
-<!-- KEEP REST OF FILE SAME -->
+<!-- FOOTER -->
+<footer>© Wee'z Kitchen</footer>
 
 <script src="script.js"></script>
 
-<!-- 🔥 FIXED & IMPROVED JS -->
+<!-- ✅ FIXED JS -->
 <script>
-const checkoutOverlay = document.getElementById("checkoutOverlay");
-
-// ✅ OPEN CHECKOUT
 function openCheckout() {
-  checkoutOverlay.style.display = "flex";
-
-  // trigger animation
-  setTimeout(() => {
-    checkoutOverlay.classList.add("active");
-  }, 10);
+  document.getElementById("checkoutOverlay").classList.add("active");
 }
 
-// ✅ CLOSE CHECKOUT
 function closeCheckout() {
-  checkoutOverlay.classList.remove("active");
-
-  setTimeout(() => {
-    checkoutOverlay.style.display = "none";
-  }, 300);
+  document.getElementById("checkoutOverlay").classList.remove("active");
 }
-
-// OPTIONAL: close when clicking outside modal
-checkoutOverlay.addEventListener("click", function (e) {
-  if (e.target === checkoutOverlay) {
-    closeCheckout();
-  }
-});
 </script>
 
 </body>
