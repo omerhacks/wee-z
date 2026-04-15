@@ -107,3 +107,77 @@ body {
 #checkoutOverlay {
   display: none;
 }
+
+/* GRID */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  padding: 40px 20px;
+}
+
+/* CARD */
+.menu-card {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* IMAGE */
+.menu-img {
+  height: 200px;
+  overflow: hidden;
+}
+
+.menu-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* CONTENT */
+.menu-content {
+  padding: 16px;
+}
+
+.menu-content h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.menu-content p {
+  font-size: 13px;
+  color: #666;
+  margin: 8px 0;
+}
+
+/* FOOTER */
+.menu-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-footer button {
+  background: #6c4cff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+/* 🔥 3D HOVER EFFECT */
+.menu-card:hover {
+  transform: rotateY(6deg) rotateX(6deg) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.menu-card:hover img {
+  transform: scale(1.1);
+}
