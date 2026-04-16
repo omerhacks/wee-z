@@ -36,6 +36,7 @@ async function loadMenu() {
     const json = await res.json();
     allMenuItems = json.data;
     buildCategoryFilters(allMenuItems);
+    console.log("Rendering menu...");
     renderMenu(allMenuItems);
   } catch (err) {
     document.getElementById('menuGrid').innerHTML =
@@ -126,6 +127,7 @@ function changeQty(itemId, delta) {
     cart.splice(idx, 1);
     updateAddBtnState(itemId);
   }
+  if (!document.getElementById('cartItems')) return;
   updateCartUI();
 }
 
@@ -148,7 +150,7 @@ function updateCartUI() {
   // Badge
   document.getElementById('cartBadge').textContent = totalItems;
 
-  // 🔴 EMPTY CART
+  // 🛑 EMPTY CART
   if (cart.length === 0) {
     cartItemsEl.innerHTML = `
       <div class="cart-empty">
@@ -161,36 +163,16 @@ function updateCartUI() {
 
   if (cartFooter) cartFooter.style.display = 'block';
 
-  // 🔥 RENDER ITEMS (THIS WAS MISSING / BROKEN)
-  cartItemsEl.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <div>
-        <strong>${item.name}</strong><br>
-        Rs. ${(item.price * item.quantity)}
-      </div>
-
-      <div>
-        <button onclick="changeQty(${item.id}, -1)">−</button>
-        <span>${item.quantity}</span>
-        <button onclick="changeQty(${item.id}, 1)">+</button>
-      </div>
-    </div>
-  `).join('');
-
-  // Totals
-  document.getElementById('cartSubtotal').textContent = `Rs. ${subtotal}`;
-  document.getElementById('cartTotal').textContent = `Rs. ${subtotal}`;
-}
-
-  cartEmptyEl.style.display = 'none';
-  cartFooter.style.display = 'block';
-
+  // ✅ CLEAN RENDER (ONLY ONE VERSION)
   cartItemsEl.innerHTML = cart.map(item => `
     <div class="cart-item">
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">Rs. ${(item.price * item.quantity).toLocaleString()}</div>
+        <div class="cart-item-price">
+          Rs. ${(item.price * item.quantity).toLocaleString()}
+        </div>
       </div>
+
       <div class="qty-ctrl">
         <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
         <span class="qty-num">${item.quantity}</span>
@@ -199,11 +181,13 @@ function updateCartUI() {
     </div>
   `).join('');
 
-  document.getElementById('cartSubtotal').textContent = `Rs. ${subtotal.toLocaleString()}`;
-  document.getElementById('cartTotal').textContent = `Rs. ${total.toLocaleString()}`;
-  document.getElementById('deliveryFeeRow').style.display = orderType === 'delivery' ? 'flex' : 'none';
+  // Totals
+  document.getElementById('cartSubtotal').textContent =
+    `Rs. ${subtotal.toLocaleString()}`;
 
-  // Also update modal final total if open
+  document.getElementById('cartTotal').textContent =
+    `Rs. ${subtotal.toLocaleString()}`;
+}
   updateFinalTotal();
 }
 
