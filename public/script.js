@@ -187,7 +187,7 @@ function updateCartUI() {
 
   document.getElementById('cartTotal').textContent =
     `Rs. ${subtotal.toLocaleString()}`;
-}
+
   updateFinalTotal();
 }
 
