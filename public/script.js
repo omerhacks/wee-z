@@ -155,11 +155,11 @@ function updateCartUI() {
         <p>Your cart is empty</p>
       </div>
     `;
-    cartFooter.style.display = 'none';
+    if (cartFooter) cartFooter.style.display = 'none';
     return;
   }
 
-  cartFooter.style.display = 'block';
+  if (cartFooter) cartFooter.style.display = 'block';
 
   // 🔥 RENDER ITEMS (THIS WAS MISSING / BROKEN)
   cartItemsEl.innerHTML = cart.map(item => `
