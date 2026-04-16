@@ -1,3 +1,15 @@
+//chatgpt animation code 
+const animationConfig = {
+  hover: {
+    rotateIntensity: 20,
+    scale: 1.05,
+    shadow: "0 20px 40px rgba(0,0,0,0.2)"
+  },
+  imageZoom: 1.1,
+  duration: 300
+};
+
+
 /**
  * Wee'z Kitchen — Customer Frontend Script
  * Handles: menu loading, cart, checkout, order submission, WhatsApp redirect
