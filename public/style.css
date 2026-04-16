@@ -267,27 +267,18 @@ input, textarea, select {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Menu Card */
+/* Menu Card */gpt
 .menu-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
-  transition: transform .25s, box-shadow .25s;
-  display: flex;
-  flex-direction: column;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
 }
-.menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-.card-img-wrap {
-  position: relative;
-  height: 190px;
-  overflow: hidden;
+
+.menu-img img {
+  transition: transform 0.4s ease;
 }
-.card-img-wrap img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform .4s;
+
+.menu-card:hover img {
+  transform: scale(1.1);
 }
 .menu-card:hover .card-img-wrap img { transform: scale(1.06); }
 .card-category-tag {
