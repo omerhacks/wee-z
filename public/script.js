@@ -139,26 +139,48 @@ function updateAddBtnState(itemId) {
 
 // Re-render everything cart-related
 function updateCartUI() {
+  const cartItemsEl = document.getElementById('cartItems');
+  const cartFooter  = document.getElementById('cartFooter');
+
   const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
   const subtotal   = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
-  const orderType  = getOrderType();
-  const total      = subtotal + (orderType === 'delivery' ? DELIVERY_FEE : 0);
 
   // Badge
   document.getElementById('cartBadge').textContent = totalItems;
 
-  // Items list
-  const cartItemsEl = document.getElementById('cartItems');
-  const cartEmptyEl = document.getElementById('cartEmpty');
-  const cartFooter  = document.getElementById('cartFooter');
-
+  // 🔴 EMPTY CART
   if (cart.length === 0) {
-    cartItemsEl.innerHTML = '';
-    cartItemsEl.appendChild(cartEmptyEl);
-    cartEmptyEl.style.display = 'block';
+    cartItemsEl.innerHTML = `
+      <div class="cart-empty">
+        <p>Your cart is empty</p>
+      </div>
+    `;
     cartFooter.style.display = 'none';
     return;
   }
+
+  cartFooter.style.display = 'block';
+
+  // 🔥 RENDER ITEMS (THIS WAS MISSING / BROKEN)
+  cartItemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div>
+        <strong>${item.name}</strong><br>
+        Rs. ${(item.price * item.quantity)}
+      </div>
+
+      <div>
+        <button onclick="changeQty(${item.id}, -1)">−</button>
+        <span>${item.quantity}</span>
+        <button onclick="changeQty(${item.id}, 1)">+</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Totals
+  document.getElementById('cartSubtotal').textContent = `Rs. ${subtotal}`;
+  document.getElementById('cartTotal').textContent = `Rs. ${subtotal}`;
+}
 
   cartEmptyEl.style.display = 'none';
   cartFooter.style.display = 'block';
