@@ -1,15 +1,3 @@
-//chatgpt animation code 
-const animationConfig = {
-  hover: {
-    rotateIntensity: 20,
-    scale: 1.05,
-    shadow: "0 20px 40px rgba(0,0,0,0.2)"
-  },
-  imageZoom: 1.1,
-  duration: 300
-};
-
-
 /**
  * Wee'z Kitchen — Customer Frontend Script
  * Handles: menu loading, cart, checkout, order submission, WhatsApp redirect
@@ -71,56 +59,34 @@ function buildCategoryFilters(items) {
 }
 
 // Render menu cards into the grid
-function renderMenu() {
-  const container = document.getElementById("menuGrid");
-
-  container.innerHTML = menu.map(item => `
-    <div class="menu-card">
-      <div class="menu-img">
-        <img src="${item.image}" alt="${item.name}">
+function renderMenu(items) {
+  const grid = document.getElementById('menuGrid');
+  if (items.length === 0) {
+    grid.innerHTML = `<div class="loading-state"><p>No items found in this category.</p></div>`;
+    return;
+  }
+  grid.innerHTML = items.map(item => {
+    const inCart = cart.find(c => c.id === item.id);
+    return `
+    <div class="menu-card" id="card-${item.id}">
+      <div class="card-img-wrap">
+        <img src="${item.image}" alt="${item.name}" loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop'" />
+        <span class="card-category-tag">${item.category}</span>
       </div>
-
-      <div class="menu-content">
-        <h3>${item.name}</h3>
-        <p>${item.description}</p>
-
-        <div class="menu-footer">
-          <span>Rs ${item.price}</span>
-          <button>+</button>
+      <div class="card-body">
+        <div class="card-name">${item.name}</div>
+        <div class="card-desc">${item.description || ''}</div>
+        <div class="card-footer">
+          <div class="card-price">Rs. ${item.price.toLocaleString()} <span>/ serving</span></div>
+          <button class="add-btn ${inCart ? 'in-cart' : ''}" id="addBtn-${item.id}"
+                  onclick="addToCart(${item.id})">
+            ${inCart ? `✓ Added` : '+ Add'}
+          </button>
         </div>
       </div>
-    </div>
-  `).join("");
-
-  apply3D();
-} //gpt function
-function apply3D() {
-  document.querySelectorAll('.menu-card').forEach(card => {
-
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const rotateY = (x / rect.width - 0.5) * animationConfig.hover.rotateIntensity;
-      const rotateX = (y / rect.height - 0.5) * -animationConfig.hover.rotateIntensity;
-
-      card.style.transform = `
-        rotateY(${rotateY}deg)
-        rotateX(${rotateX}deg)
-        scale(${animationConfig.hover.scale})
-      `;
-
-      card.style.boxShadow = animationConfig.hover.shadow;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = "rotateY(0deg) rotateX(0deg)";
-      card.style.boxShadow = "0 10px 25px rgba(0,0,0,0.08)";
-    });
-
-  });
+    </div>`;
+  }).join('');
 }
 
 // Filter menu by category
