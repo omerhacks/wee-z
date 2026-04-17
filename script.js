@@ -1,100 +1,98 @@
-function disableDeliveryIfLate() {
-  try {
-    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Karachi" }));
-
-    const currentTime = now.getHours() * 60 + now.getMinutes();
-    const cutoffTime = 22 * 60 + 30;
-
-    if (currentTime >= cutoffTime) {
-      const deliveryOption = document.querySelector('input[value="delivery"]');
-      const pickupOption = document.querySelector('input[value="pickup"]');
-
-      if (deliveryOption) {
-        deliveryOption.disabled = true;
-      }/**
+/**
  * Wee'z Kitchen — Customer Frontend Script
- * Handles: menu loading, cart, checkout, order submission, WhatsApp redirect
  */
 
-// ─── App State ─────────────────────────────────────────────────────────────
-let allMenuItems = [];   // Full menu from API
-let cart = [];           // Cart items: { id, name, price, quantity }
+// ─── App State ─────────────────────────────────────────────
+let allMenuItems = [];
+let cart = [];
 let screenshotBase64 = null;
 
 const DELIVERY_FEE = 100;
 const WHATSAPP_NUMBER = '923000609339';
 
-// ─── Init ───────────────────────────────────────────────────────────────────
+// ─── Init ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   loadMenu();
   initNavbarScroll();
-  onOrderTypeChange(); // Set initial state
+  onOrderTypeChange();
 });
 
-// ─── Navbar scroll effect ───────────────────────────────────────────────────
+// ─── Navbar ───────────────────────────────────────────────
 function initNavbarScroll() {
   window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    const nav = document.getElementById('navbar');
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
   });
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  MENU
-// ══════════════════════════════════════════════════════════════════════════════
+// ═════════ MENU ═════════
 
-// Fetch menu from backend API
 async function loadMenu() {
   try {
     const res = await fetch('/menu');
     const json = await res.json();
-    allMenuItems = json.data;
+    allMenuItems = json.data || [];
     buildCategoryFilters(allMenuItems);
     renderMenu(allMenuItems);
   } catch (err) {
     document.getElementById('menuGrid').innerHTML =
-      `<div class="loading-state"><p>⚠️ Failed to load menu. Please refresh the page.</p></div>`;
+      `<div class="loading-state"><p>Failed to load menu. Please refresh.</p></div>`;
   }
 }
 
-// Build category filter buttons dynamically
 function buildCategoryFilters(items) {
-  const categories = [...new Set(items.map(i => i.category))];
   const container = document.getElementById('categoryFilters');
-  // Keep the "All" button, add category buttons
+  if (!container) return;
+
+  const categories = [...new Set(items.map(i => i.category))];
+
   categories.forEach(cat => {
     const btn = document.createElement('button');
     btn.className = 'filter-btn';
-    btn.dataset.cat = cat;
     btn.textContent = cat;
+    btn.setAttribute('data-cat', cat);
     btn.onclick = () => filterCategory(cat, btn);
     container.appendChild(btn);
   });
 }
 
-// Render menu cards into the grid
 function renderMenu(items) {
   const grid = document.getElementById('menuGrid');
+  if (!grid) return;
+
   if (items.length === 0) {
-    grid.innerHTML = `<div class="loading-state"><p>No items found in this category.</p></div>`;
+    grid.innerHTML = `<div class="loading-state"><p>No items in this category.</p></div>`;
     return;
   }
+
   grid.innerHTML = items.map(item => {
     const inCart = cart.find(c => c.id === item.id);
+    const imgSrc = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80';
+
     return `
     <div class="menu-card" id="card-${item.id}">
       <div class="card-img-wrap">
-        <img src="${item.image}" alt="${item.name}" loading="lazy"
-             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop'" />
+        <img
+          src="${imgSrc}"
+          alt="${item.name}"
+          loading="lazy"
+          onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80'"
+        />
         <span class="card-category-tag">${item.category}</span>
       </div>
       <div class="card-body">
         <div class="card-name">${item.name}</div>
-        <div class="card-desc">${item.description || ''}</div>
+        ${item.description ? `<div class="card-desc">${item.description}</div>` : ''}
         <div class="card-footer">
-          <div class="card-price">Rs. ${item.price.toLocaleString()} <span>/ serving</span></div>
-          <button class="add-btn ${inCart ? 'in-cart' : ''}" id="addBtn-${item.id}"
-                  onclick="addToCart(${item.id})">
-            ${inCart ? `✓ Added` : '+ Add'}
+          <div class="card-price">
+            <span>Rs.</span>${item.price.toLocaleString()}
+          </div>
+          <button
+            class="add-btn ${inCart ? 'in-cart' : ''}"
+            id="addBtn-${item.id}"
+            onclick="addToCart(${item.id})"
+          >
+            ${inCart ? '✓ Added' : '+ Add'}
           </button>
         </div>
       </div>
@@ -102,18 +100,18 @@ function renderMenu(items) {
   }).join('');
 }
 
-// Filter menu by category
 function filterCategory(cat, btn) {
-  // Update active button
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const filtered = cat === 'All' ? allMenuItems : allMenuItems.filter(i => i.category === cat);
+  if (btn) btn.classList.add('active');
+
+  const filtered = cat === 'All'
+    ? allMenuItems
+    : allMenuItems.filter(i => i.category === cat);
+
   renderMenu(filtered);
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  CART
-// ══════════════════════════════════════════════════════════════════════════════
+// ═════════ CART ═════════
 
 function addToCart(itemId) {
   const item = allMenuItems.find(i => i.id === itemId);
@@ -126,56 +124,62 @@ function addToCart(itemId) {
     cart.push({ id: item.id, name: item.name, price: item.price, quantity: 1 });
   }
 
+  // Update the card button state without full re-render
+  const btn = document.getElementById(`addBtn-${itemId}`);
+  if (btn) {
+    btn.classList.add('in-cart');
+    btn.textContent = '✓ Added';
+  }
+
   updateCartUI();
-  updateAddBtnState(itemId);
-  showToast(`${item.name} added to cart 🛒`, 'success');
+  showToast(`${item.name} added to cart`, 'success');
 }
 
 function changeQty(itemId, delta) {
   const idx = cart.findIndex(c => c.id === itemId);
   if (idx === -1) return;
+
   cart[idx].quantity += delta;
+
   if (cart[idx].quantity <= 0) {
     cart.splice(idx, 1);
-    updateAddBtnState(itemId);
+    // Reset the card button
+    const btn = document.getElementById(`addBtn-${itemId}`);
+    if (btn) {
+      btn.classList.remove('in-cart');
+      btn.textContent = '+ Add';
+    }
   }
+
   updateCartUI();
 }
 
-function updateAddBtnState(itemId) {
-  const btn = document.getElementById(`addBtn-${itemId}`);
-  if (!btn) return;
-  const inCart = cart.find(c => c.id === itemId);
-  btn.textContent = inCart ? '✓ Added' : '+ Add';
-  btn.classList.toggle('in-cart', !!inCart);
-}
-
-// Re-render everything cart-related
 function updateCartUI() {
-  const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
-  const subtotal   = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
-  const orderType  = getOrderType();
-  const total      = subtotal + (orderType === 'delivery' ? DELIVERY_FEE : 0);
-
-  // Badge
-  document.getElementById('cartBadge').textContent = totalItems;
-
-  // Items list
   const cartItemsEl = document.getElementById('cartItems');
-  const cartEmptyEl = document.getElementById('cartEmpty');
   const cartFooter  = document.getElementById('cartFooter');
+  if (!cartItemsEl) return;
+
+  const totalItems = cart.reduce((s, c) => s + c.quantity, 0);
+  const subtotal   = cart.reduce((s, c) => s + c.price * c.quantity, 0);
+
+  // Update badge
+  const badge = document.getElementById('cartBadge');
+  if (badge) badge.textContent = totalItems;
 
   if (cart.length === 0) {
-    cartItemsEl.innerHTML = '';
-    cartItemsEl.appendChild(cartEmptyEl);
-    cartEmptyEl.style.display = 'block';
-    cartFooter.style.display = 'none';
+    cartItemsEl.innerHTML = `
+      <div class="cart-empty" id="cartEmpty">
+        <div style="font-size:2.5rem">🍽️</div>
+        <p>Your cart is empty</p>
+        <small>Add some delicious items to get started!</small>
+      </div>`;
+    if (cartFooter) cartFooter.style.display = 'none';
     return;
   }
 
-  cartEmptyEl.style.display = 'none';
-  cartFooter.style.display = 'block';
+  if (cartFooter) cartFooter.style.display = 'block';
 
+  // Render cart items with proper structure
   cartItemsEl.innerHTML = cart.map(item => `
     <div class="cart-item">
       <div class="cart-item-info">
@@ -190,281 +194,188 @@ function updateCartUI() {
     </div>
   `).join('');
 
-  document.getElementById('cartSubtotal').textContent = `Rs. ${subtotal.toLocaleString()}`;
-  document.getElementById('cartTotal').textContent = `Rs. ${total.toLocaleString()}`;
-  document.getElementById('deliveryFeeRow').style.display = orderType === 'delivery' ? 'flex' : 'none';
+  // Update totals
+  const isDelivery = document.querySelector('input[name="orderType"]:checked')?.value === 'delivery';
+  const total = subtotal + (isDelivery ? DELIVERY_FEE : 0);
 
-  // Also update modal final total if open
+  const sub = document.getElementById('cartSubtotal');
+  const tot = document.getElementById('cartTotal');
+  const deliveryRow = document.getElementById('deliveryFeeRow');
+
+  if (sub) sub.textContent = `Rs. ${subtotal.toLocaleString()}`;
+  if (deliveryRow) deliveryRow.style.display = isDelivery ? 'flex' : 'none';
+  if (tot) tot.textContent = `Rs. ${total.toLocaleString()}`;
+
   updateFinalTotal();
 }
 
-function getOrderType() {
-  const sel = document.querySelector('input[name="orderType"]:checked');
-  return sel ? sel.value : 'pickup';
-}
+// ═════════ CHECKOUT ═════════
 
 function toggleCart() {
-  document.getElementById('cartSidebar').classList.toggle('open');
-  document.getElementById('cartOverlay').classList.toggle('open');
+  document.getElementById('cartSidebar')?.classList.toggle('open');
+  document.getElementById('cartOverlay')?.classList.toggle('open');
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  CHECKOUT MODAL
-// ══════════════════════════════════════════════════════════════════════════════
-
 function openCheckout() {
-  if (cart.length === 0) { showToast('Add items to cart first!', 'error'); return; }
+  if (cart.length === 0) { showToast('Your cart is empty', 'error'); return; }
   toggleCart();
   renderOrderSummary();
-  updateFinalTotal();
-  document.getElementById('checkoutOverlay').classList.add('open');
+  document.getElementById('checkoutOverlay')?.classList.add('open');
 }
 
 function closeCheckout() {
-  document.getElementById('checkoutOverlay').classList.remove('open');
+  document.getElementById('checkoutOverlay')?.classList.remove('open');
 }
 
 function renderOrderSummary() {
-  const subtotal = cart.reduce((s, c) => s + c.price * c.quantity, 0);
-  const orderType = getOrderType();
-  const total = subtotal + (orderType === 'delivery' ? DELIVERY_FEE : 0);
+  const el = document.getElementById('orderSummaryMini');
+  if (!el) return;
 
-  document.getElementById('orderSummaryMini').innerHTML = `
-    ${cart.map(item => `
-      <div class="summary-item">
-        <span>${item.name} × ${item.quantity}</span>
-        <span>Rs. ${(item.price * item.quantity).toLocaleString()}</span>
-      </div>`).join('')}
-    ${orderType === 'delivery' ? `<div class="summary-item"><span>Delivery Fee</span><span>Rs. 100</span></div>` : ''}
+  const subtotal = cart.reduce((s, c) => s + c.price * c.quantity, 0);
+
+  el.innerHTML = cart.map(i => `
+    <div class="summary-item">
+      <span>${i.name} × ${i.quantity}</span>
+      <span>Rs. ${(i.price * i.quantity).toLocaleString()}</span>
+    </div>
+  `).join('') + `
     <div class="summary-item total">
-      <span>Total</span>
-      <span>Rs. ${total.toLocaleString()}</span>
+      <span>Subtotal</span>
+      <span>Rs. ${subtotal.toLocaleString()}</span>
     </div>`;
 }
 
 function updateFinalTotal() {
-  const subtotal  = cart.reduce((s, c) => s + c.price * c.quantity, 0);
-  const orderType = getOrderType();
-  const total     = subtotal + (orderType === 'delivery' ? DELIVERY_FEE : 0);
   const el = document.getElementById('finalTotal');
-  if (el) el.textContent = `Rs. ${total.toLocaleString()}`;
+  if (!el) return;
+
+  const subtotal = cart.reduce((s, c) => s + c.price * c.quantity, 0);
+  const isDelivery = document.querySelector('input[name="orderType"]:checked')?.value === 'delivery';
+  const total = subtotal + (isDelivery ? DELIVERY_FEE : 0);
+
+  el.textContent = `Rs. ${total.toLocaleString()}`;
 }
 
-// ─── Order Type Change ──────────────────────────────────────────────────────
 function onOrderTypeChange() {
-  const orderType = getOrderType();
+  const type = document.querySelector('input[name="orderType"]:checked')?.value;
+  const addressGroup  = document.getElementById('addressGroup');
+  const deliveryFeeRow = document.getElementById('deliveryFeeRow');
+  const cashOpt       = document.getElementById('cashOpt');
 
-  // Address field visibility
-  document.getElementById('addressGroup').style.display =
-    orderType === 'delivery' ? 'block' : 'none';
-
-  // Cash option: only for delivery
-  const cashOpt = document.getElementById('cashOpt');
-  cashOpt.style.display = orderType === 'delivery' ? 'flex' : 'none';
-
-  // If pickup was selected and cash was checked, deselect it
-  if (orderType === 'pickup') {
-    const cashRadio = cashOpt.querySelector('input');
-    if (cashRadio.checked) {
-      cashRadio.checked = false;
-      // Auto-select JazzCash
-      const jazz = document.querySelector('input[value="jazzcash"]');
-      if (jazz) jazz.checked = true;
-      onPaymentChange();
-    }
-  }
+  if (addressGroup)   addressGroup.style.display   = type === 'delivery' ? 'block' : 'none';
+  if (deliveryFeeRow) deliveryFeeRow.style.display  = type === 'delivery' ? 'flex'  : 'none';
+  if (cashOpt)        cashOpt.style.display         = type === 'delivery' ? 'block' : 'none';
 
   updateCartUI();
-  renderOrderSummary();
   updateFinalTotal();
 }
 
-// ─── Payment Change ─────────────────────────────────────────────────────────
 function onPaymentChange() {
-  const payment = document.querySelector('input[name="payment"]:checked')?.value;
-  const detailsEl = document.getElementById('onlinePayDetails');
-  const instrEl   = document.getElementById('payInstructions');
+  const method = document.querySelector('input[name="payment"]:checked')?.value;
+  const onlinePayDetails = document.getElementById('onlinePayDetails');
+  const payInstructions  = document.getElementById('payInstructions');
 
-  if (payment === 'jazzcash' || payment === 'easypaisa') {
-    detailsEl.style.display = 'block';
+  if (!onlinePayDetails) return;
 
-    const info = payment === 'jazzcash'
-      ? { name: 'JazzCash', number: '03XX-XXXXXXX', color: '#c8102e' }
-      : { name: 'Easypaisa', number: '03XX-XXXXXXX', color: '#005c2b' };
-
-    instrEl.innerHTML = `
-      <strong style="color:${info.color}">📲 Send payment via ${info.name}</strong>
-      Account Number: <strong>${info.number}</strong><br/>
-      Account Name: <strong>Wee'z Kitchen</strong><br/>
-      After sending, enter your Transaction ID <strong>or</strong> upload a screenshot below.`;
+  if (method === 'jazzcash' || method === 'easypaisa') {
+    onlinePayDetails.style.display = 'block';
+    if (payInstructions) {
+      const details = method === 'jazzcash'
+        ? { name: 'JazzCash', number: '0300-0609339', account: 'Wee\'z Kitchen' }
+        : { name: 'Easypaisa', number: '0300-0609339', account: 'Wee\'z Kitchen' };
+      payInstructions.innerHTML = `
+        <strong>${details.name} Payment Details</strong>
+        Send payment to: <strong>${details.number}</strong><br>
+        Account Name: <strong>${details.account}</strong>
+      `;
+    }
   } else {
-    detailsEl.style.display = 'none';
-    screenshotBase64 = null;
-    document.getElementById('uploadPreview').style.display = 'none';
-    document.getElementById('uploadPlaceholder').style.display = 'block';
+    onlinePayDetails.style.display = 'none';
   }
 }
 
-// ─── Screenshot Upload ──────────────────────────────────────────────────────
 function onScreenshotSelect(event) {
   const file = event.target.files[0];
   if (!file) return;
+
   const reader = new FileReader();
   reader.onload = (e) => {
     screenshotBase64 = e.target.result;
-    document.getElementById('previewImg').src = screenshotBase64;
-    document.getElementById('uploadPreview').style.display = 'block';
     document.getElementById('uploadPlaceholder').style.display = 'none';
+    document.getElementById('uploadPreview').style.display = 'block';
+    document.getElementById('previewImg').src = screenshotBase64;
   };
   reader.readAsDataURL(file);
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  PLACE ORDER
-// ══════════════════════════════════════════════════════════════════════════════
-
 async function placeOrder() {
-  // ── Gather form values ────────────────────────────────────────────────────
-  const customerName  = document.getElementById('custName').value.trim();
-  const phone         = document.getElementById('custPhone').value.trim();
-  const orderType     = getOrderType();
-  const address       = document.getElementById('custAddress').value.trim();
-  const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value;
-  const transactionId = document.getElementById('transactionId').value.trim();
+  const name    = document.getElementById('custName')?.value.trim();
+  const phone   = document.getElementById('custPhone')?.value.trim();
+  const type    = document.querySelector('input[name="orderType"]:checked')?.value;
+  const address = document.getElementById('custAddress')?.value.trim();
+  const payment = document.querySelector('input[name="payment"]:checked')?.value;
+
+  if (!name)    { showToast('Please enter your name', 'error'); return; }
+  if (!phone)   { showToast('Please enter your phone number', 'error'); return; }
+  if (type === 'delivery' && !address) { showToast('Please enter delivery address', 'error'); return; }
+  if (!payment) { showToast('Please select a payment method', 'error'); return; }
 
   const subtotal = cart.reduce((s, c) => s + c.price * c.quantity, 0);
-  const total    = subtotal + (orderType === 'delivery' ? DELIVERY_FEE : 0);
+  const total    = subtotal + (type === 'delivery' ? DELIVERY_FEE : 0);
 
-  // ── Validation ────────────────────────────────────────────────────────────
-  if (!customerName)  return showToast('Please enter your name', 'error');
-  if (!phone)         return showToast('Please enter your phone number', 'error');
-  if (!/^0[0-9]{9,10}$/.test(phone.replace(/[-\s]/g, '')))
-    return showToast('Enter a valid Pakistani phone number', 'error');
-  if (!paymentMethod) return showToast('Please select a payment method', 'error');
-  if (orderType === 'delivery' && !address)
-    return showToast('Please enter your delivery address', 'error');
-  if (orderType === 'pickup' && paymentMethod === 'cash')
-    return showToast('Cash payment is not allowed for pickup', 'error');
-  if ((paymentMethod === 'jazzcash' || paymentMethod === 'easypaisa') && !transactionId && !screenshotBase64)
-    return showToast('Please enter Transaction ID or upload payment screenshot', 'error');
+  const itemsList = cart.map(i => `• ${i.name} ×${i.quantity} = Rs.${i.price * i.quantity}`).join('%0A');
 
-  // ── Show loading state ────────────────────────────────────────────────────
-  const btn = document.getElementById('placeOrderBtn');
-  document.getElementById('orderBtnText').style.display = 'none';
-  document.getElementById('btnSpinner').style.display = 'block';
-  btn.disabled = true;
+  const msg = [
+    `🍛 *New Order — Wee'z Kitchen*`,
+    ``,
+    `👤 *Customer:* ${name}`,
+    `📞 *Phone:* ${phone}`,
+    `🚗 *Order Type:* ${type === 'delivery' ? 'Delivery' : 'Pickup'}`,
+    type === 'delivery' ? `📍 *Address:* ${address}` : '',
+    `💳 *Payment:* ${payment}`,
+    ``,
+    `🧾 *Order Details:*`,
+    itemsList,
+    ``,
+    `💰 *Subtotal:* Rs.${subtotal}`,
+    type === 'delivery' ? `🛵 *Delivery Fee:* Rs.${DELIVERY_FEE}` : '',
+    `✅ *Total: Rs.${total}*`,
+  ].filter(Boolean).join('%0A');
 
-  // ── Build payload ─────────────────────────────────────────────────────────
-  const payload = {
-    customerName,
-    phone,
-    orderType,
-    address,
-    items: cart,
-    total,
-    paymentMethod,
-    transactionId: transactionId || null,
-    screenshotData: screenshotBase64 || null
-  };
+  // Disable button
+  const btn  = document.getElementById('placeOrderBtn');
+  const text = document.getElementById('orderBtnText');
+  const spin = document.getElementById('btnSpinner');
+  if (btn)  btn.disabled = true;
+  if (text) text.style.display = 'none';
+  if (spin) spin.style.display = 'block';
 
-  try {
-    // ── POST to backend ─────────────────────────────────────────────────────
-    const res = await fetch('/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const json = await res.json();
-
-    if (!json.success) throw new Error(json.message);
-
-    // ── Build WhatsApp message ──────────────────────────────────────────────
-    const waMsg = buildWhatsAppMessage({
-      orderNumber: json.order.orderNumber,
-      customerName,
-      phone,
-      orderType,
-      address: orderType === 'delivery' ? address : 'Pickup at Restaurant',
-      items: cart,
-      subtotal,
-      deliveryFee: orderType === 'delivery' ? DELIVERY_FEE : 0,
-      total,
-      paymentMethod,
-      transactionId: transactionId || 'N/A'
-    });
-
-    // Clear cart
-    cart = [];
-    screenshotBase64 = null;
-    updateCartUI();
+  setTimeout(() => {
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    if (btn)  btn.disabled = false;
+    if (text) text.style.display = 'block';
+    if (spin) spin.style.display = 'none';
     closeCheckout();
-
-    showToast(`Order ${json.order.orderNumber} placed! Redirecting to WhatsApp...`, 'success');
-
-    // ── Redirect to WhatsApp ────────────────────────────────────────────────
-    setTimeout(() => {
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank');
-    }, 1200);
-
-  } catch (err) {
-    showToast(err.message || 'Failed to place order. Try again.', 'error');
-  } finally {
-    document.getElementById('orderBtnText').style.display = 'inline';
-    document.getElementById('btnSpinner').style.display = 'none';
-    btn.disabled = false;
-  }
+    cart = [];
+    updateCartUI();
+    // Reset all card buttons
+    document.querySelectorAll('.add-btn.in-cart').forEach(b => {
+      b.classList.remove('in-cart');
+      b.textContent = '+ Add';
+    });
+    showToast('Order sent via WhatsApp! 🎉', 'success');
+  }, 800);
 }
 
-// ─── Build WhatsApp message ─────────────────────────────────────────────────
-function buildWhatsAppMessage({ orderNumber, customerName, phone, orderType, address, items, subtotal, deliveryFee, total, paymentMethod, transactionId }) {
-  const payLabels = { cash: 'Cash on Delivery', jazzcash: 'JazzCash', easypaisa: 'Easypaisa' };
-  const itemsList = items.map(i => `  • ${i.name} × ${i.quantity}  = Rs. ${(i.price * i.quantity).toLocaleString()}`).join('\n');
+// ═════════ TOAST ═════════
 
-  return `🍛 *NEW ORDER — Wee'z Kitchen*
-━━━━━━━━━━━━━━━━━━━━
-📋 *Order ID:* ${orderNumber}
-👤 *Name:* ${customerName}
-📞 *Phone:* ${phone}
-🚗 *Type:* ${orderType === 'pickup' ? 'Pickup 🏪' : 'Delivery 🛵'}
-📍 *Address:* ${address}
-━━━━━━━━━━━━━━━━━━━━
-🛒 *Items Ordered:*
-${itemsList}
-━━━━━━━━━━━━━━━━━━━━
-💰 *Subtotal:* Rs. ${subtotal.toLocaleString()}
-${deliveryFee > 0 ? `🛵 *Delivery Fee:* Rs. ${deliveryFee}\n` : ''}💳 *Total:* Rs. ${total.toLocaleString()}
-━━━━━━━━━━━━━━━━━━━━
-💳 *Payment:* ${payLabels[paymentMethod] || paymentMethod}
-🔖 *Transaction ID:* ${transactionId}
-━━━━━━━━━━━━━━━━━━━━
-Please confirm this order. Thank you! 🙏`;
-}
+function showToast(msg, type = '') {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  TOAST NOTIFICATION
-// ══════════════════════════════════════════════════════════════════════════════
-
-function showToast(msg, type = 'default') {
-  // Remove existing toasts
-  document.querySelectorAll('.toast').forEach(t => t.remove());
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.textContent = msg;
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3200);
+  setTimeout(() => toast.remove(), 3000);
 }
-
-
-      if (pickupOption) {
-        pickupOption.checked = true;
-      }
-
-      const msg = document.getElementById("deliveryMsg");
-      if (msg) msg.style.display = "block";
-    }
-  } catch (e) {
-    console.error("Delivery check error:", e);
-  }
-}
-
-window.addEventListener("DOMContentLoaded", disableDeliveryIfLate);
