@@ -9,7 +9,7 @@ let cart = [];           // Cart items: { id, name, price, quantity }
 let screenshotBase64 = null;
 
 const DELIVERY_FEE = 100;
-const WHATSAPP_NUMBER = '923000609339';
+const WHATSAPP_NUMBER = '923054684924';
 
 // ─── Init ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -102,25 +102,15 @@ function filterCategory(cat, btn) {
 //  CART
 // ══════════════════════════════════════════════════════════════════════════════
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  CART (FIXED)
-// ══════════════════════════════════════════════════════════════════════════════
-
 function addToCart(itemId) {
   const item = allMenuItems.find(i => i.id === itemId);
   if (!item) return;
 
-  const existing = cart.find(i => i.id === itemId);
-
+  const existing = cart.find(c => c.id === itemId);
   if (existing) {
-    existing.quantity += 1;
+    existing.quantity++;
   } else {
-    cart.push({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: 1
-    });
+    cart.push({ id: item.id, name: item.name, price: item.price, quantity: 1 });
   }
 
   updateCartUI();
@@ -131,21 +121,17 @@ function addToCart(itemId) {
 function changeQty(itemId, delta) {
   const idx = cart.findIndex(c => c.id === itemId);
   if (idx === -1) return;
-
   cart[idx].quantity += delta;
-
   if (cart[idx].quantity <= 0) {
     cart.splice(idx, 1);
+    updateAddBtnState(itemId);
   }
-
-  updateAddBtnState(itemId);
   updateCartUI();
 }
 
 function updateAddBtnState(itemId) {
   const btn = document.getElementById(`addBtn-${itemId}`);
   if (!btn) return;
-
   const inCart = cart.find(c => c.id === itemId);
   btn.textContent = inCart ? '✓ Added' : '+ Add';
   btn.classList.toggle('in-cart', !!inCart);
