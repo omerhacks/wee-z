@@ -1,260 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wee'z Kitchen — Authentic Pakistani Cuisine</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — Wee'z Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />    <link rel="stylesheet" href="admin.css">
+
 <body>
 
-<!-- ═══════════════════ NAVBAR ═══════════════════ -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <div class="nav-brand">
-      <span class="brand-icon">🍛</span>
+<!-- ═══════════════════ LOGIN SCREEN ═══════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🍛</div>
+    <h1 class="login-title">Wee'z Kitchen</h1>
+    <p class="login-sub">Admin Panel</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
+    </div>
+    <div id="loginError" class="login-error" style="display:none">❌ Invalid username or password</div>
+    <button class="login-btn" onclick="doLogin()">Login →</button>
+    <a href="/" class="back-link">← Back to Website</a>
+  </div>
+</div>
+
+<!-- ═══════════════════ ADMIN APP ═══════════════════ -->
+<div id="adminApp" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span>🍛</span>
       <div>
-        <div class="brand-name">Wee'z Kitchen</div>
-        <div class="brand-tagline">Model Town Link Road, Lahore</div>
+        <div class="sb-title">Wee'z Kitchen</div>
+        <div class="sb-sub">Admin Panel</div>
       </div>
     </div>
-    <button class="cart-btn" id="cartBtn" onclick="toggleCart()">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 01-8 0"/>
-      </svg>
-      <span>Cart</span>
-      <span class="cart-badge" id="cartBadge">0</span>
-    </button>
-  </div>
-</nav>
-
-<!-- ═══════════════════ HERO ═══════════════════ -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-grain"></div>
-
-  <div class="hero-content">
-    <p class="hero-sub">Lahore's Finest</p>
-    <h1 class="hero-title">Flavours That<br/><em>Tell Stories</em></h1>
-    <p class="hero-desc">Authentic Pakistani cuisine crafted with generations of love. Order now for pickup or delivery across Lahore.</p>
-    <a href="#menu-section" class="hero-cta">
-      View Menu <span class="hero-cta-arrow">↓</span>
-    </a>
-  </div>
-
-  <div class="hero-divider"></div>
-
-  <div class="hero-badges">
-    <div class="badge"><span>🕐</span> Open Daily 11AM–11PM</div>
-    <div class="badge"><span>🛵</span> Delivery Available</div>
-    <div class="badge"><span>💳</span> JazzCash · Easypaisa</div>
-  </div>
-</section>
-
-<!-- ═══════════════════ MENU SECTION ═══════════════════ -->
-<section class="menu-section" id="menu-section">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Our Menu</h2>
-      <p class="section-sub">From sizzling BBQs to rich karahis — every dish made fresh to order</p>
-    </div>
-
-    <!-- Category Filters -->
-    <div class="category-filters" id="categoryFilters">
-      <button class="filter-btn active" data-cat="All" onclick="filterCategory('All', this)">All Items</button>
-      <!-- JS will inject more category buttons here -->
-    </div>
-
-    <!-- Menu Grid -->
-    <div class="menu-grid" id="menuGrid">
-      <!-- JS will inject menu cards here -->
-      <div class="loading-state" id="loadingState">
-        <div class="spinner"></div>
-        <p>Loading delicious items...</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ CART SIDEBAR ═══════════════════ -->
-<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-<aside class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <h3>🛒 Your Order</h3>
-    <button class="close-btn" onclick="toggleCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cartItems">
-    <div class="cart-empty" id="cartEmpty">
-      <div style="font-size:3rem">🍽️</div>
-      <p>Your cart is empty</p>
-      <small>Add some delicious items to get started!</small>
-    </div>
-  </div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-total-row">
-      <span>Subtotal</span>
-      <span id="cartSubtotal">Rs. 0</span>
-    </div>
-    <div class="cart-total-row delivery-row" id="deliveryFeeRow" style="display:none">
-      <span>Delivery Fee</span>
-      <span>Rs. 100</span>
-    </div>
-    <div class="cart-total-row total-row">
-      <span>Total</span>
-      <span id="cartTotal">Rs. 0</span>
-    </div>
-    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
-  </div>
-</aside>
-
-<!-- ═══════════════════ CHECKOUT MODAL ═══════════════════ -->
-<div class="modal-overlay" id="checkoutOverlay">
-  <div class="modal" id="checkoutModal">
-    <div class="modal-header">
-      <h3>🧾 Complete Your Order</h3>
-      <button class="close-btn" onclick="closeCheckout()">✕</button>
-    </div>
-    <div class="modal-body">
-
-      <!-- Order Summary -->
-      <div class="order-summary-mini" id="orderSummaryMini"></div>
-
-      <!-- Customer Info -->
-      <div class="form-section">
-        <h4 class="form-section-title">📋 Your Details</h4>
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" id="custName" placeholder="e.g. Ahmed Khan" />
-        </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="custPhone" placeholder="e.g. 0300-1234567" />
-        </div>
-      </div>
-
-      <!-- Order Type -->
-      <div class="form-section">
-        <h4 class="form-section-title">🚗 Order Type</h4>
-        <div class="order-type-group">
-          <label class="order-type-btn" id="lblPickup">
-            <input type="radio" name="orderType" value="pickup" onchange="onOrderTypeChange()" checked />
-            <div class="type-card">
-              <span class="type-icon">🏪</span>
-              <span class="type-label">Pickup</span>
-              <span class="type-sub">Collect at restaurant</span>
-            </div>
-          </label>
-          <label class="order-type-btn" id="lblDelivery">
-            <input type="radio" name="orderType" value="delivery" onchange="onOrderTypeChange()" />
-            <div class="type-card">
-              <span class="type-icon">🛵</span>
-              <span class="type-label">Delivery</span>
-              <span class="type-sub">+Rs. 100 delivery fee</span>
-            </div>
-          </label>
-        </div>
-        <div class="form-group" id="addressGroup" style="display:none">
-          <label>Delivery Address *</label>
-          <textarea id="custAddress" placeholder="House/Flat No., Street, Area, Lahore" rows="2"></textarea>
-        </div>
-      </div>
-
-      <!-- Payment -->
-      <div class="form-section">
-        <h4 class="form-section-title">💳 Payment Method</h4>
-        <div class="payment-options" id="paymentOptions">
-          <!-- Cash option (only shown for delivery) -->
-          <label class="payment-opt" id="cashOpt">
-            <input type="radio" name="payment" value="cash" onchange="onPaymentChange()" />
-            <div class="pay-card">
-              <span class="pay-icon">💵</span>
-              <span class="pay-label">Cash on Delivery</span>
-            </div>
-          </label>
-          <label class="payment-opt">
-            <input type="radio" name="payment" value="jazzcash" onchange="onPaymentChange()" />
-            <div class="pay-card">
-              <span class="pay-icon">📱</span>
-              <span class="pay-label">JazzCash</span>
-            </div>
-          </label>
-          <label class="payment-opt">
-            <input type="radio" name="payment" value="easypaisa" onchange="onPaymentChange()" />
-            <div class="pay-card">
-              <span class="pay-icon">🟢</span>
-              <span class="pay-label">Easypaisa</span>
-            </div>
-          </label>
-        </div>
-
-        <!-- JazzCash / Easypaisa details -->
-        <div id="onlinePayDetails" style="display:none">
-          <div class="pay-instructions" id="payInstructions"></div>
-          <div class="form-group">
-            <label>Transaction ID</label>
-            <input type="text" id="transactionId" placeholder="e.g. TXN1234567890" />
-          </div>
-          <div class="form-group">
-            <label>— OR — Upload Payment Screenshot</label>
-            <div class="file-upload-area" onclick="document.getElementById('screenshotInput').click()">
-              <input type="file" id="screenshotInput" accept="image/*" onchange="onScreenshotSelect(event)" style="display:none" />
-              <div id="uploadPlaceholder">
-                <span style="font-size:2rem">📷</span>
-                <p>Tap to upload screenshot</p>
-              </div>
-              <div id="uploadPreview" style="display:none">
-                <img id="previewImg" src="" alt="Screenshot" />
-                <p class="upload-success">✅ Screenshot uploaded!</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Final Total -->
-      <div class="final-total-box">
-        <span>Total Payable</span>
-        <span id="finalTotal" class="final-amount">Rs. 0</span>
-      </div>
-
-      <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
-        <span id="orderBtnText">🍽️ Place Order via WhatsApp</span>
-        <div class="btn-spinner" id="btnSpinner" style="display:none"></div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showTab('orders', this)">
+        <span>📦</span> Orders
       </button>
+      <button class="nav-item" onclick="showTab('menu', this)">
+        <span>🍽️</span> Menu Items
+      </button>
+      <button class="nav-item" onclick="showTab('addItem', this)">
+        <span>➕</span> Add Item
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="nav-item">← Live Site</a>
+      <button class="nav-item logout" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </aside>
 
-      <p class="whatsapp-note">Your order details will be sent to us via WhatsApp for confirmation.</p>
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ─── ORDERS TAB ─── -->
+    <div id="tab-orders" class="tab-content active">
+      <div class="page-header">
+        <h2>📦 All Orders</h2>
+        <button class="refresh-btn" onclick="loadOrders()">↻ Refresh</button>
+      </div>
+      <div id="ordersContainer">
+        <div class="loading-msg">Loading orders...</div>
+      </div>
+    </div>
+
+    <!-- ─── MENU TAB ─── -->
+    <div id="tab-menu" class="tab-content">
+      <div class="page-header">
+        <h2>🍽️ Menu Items</h2>
+        <button class="refresh-btn" onclick="loadMenuAdmin()">↻ Refresh</button>
+      </div>
+      <div id="menuAdminContainer">
+        <div class="loading-msg">Loading menu...</div>
+      </div>
+    </div>
+
+    <!-- ─── ADD ITEM TAB ─── -->
+    <div id="tab-addItem" class="tab-content">
+      <div class="page-header"><h2>➕ Add Menu Item</h2></div>
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Item Name *</label>
+            <input type="text" id="aiName" placeholder="e.g. Chicken Karahi" />
+          </div>
+          <div class="form-group">
+            <label>Price (Rs.) *</label>
+            <input type="number" id="aiPrice" placeholder="e.g. 850" />
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <input type="text" id="aiCategory" placeholder="e.g. Main Course" />
+          </div>
+          <div class="form-group full">
+            <label>Description</label>
+            <textarea id="aiDesc" placeholder="Short description of the dish..." rows="2"></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Image URL</label>
+            <input type="url" id="aiImage" placeholder="https://... (Unsplash link recommended)" />
+          </div>
+        </div>
+        <!-- Preview -->
+        <div class="img-preview-wrap">
+          <label>Image Preview</label>
+          <img id="aiPreview" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop"
+               alt="Preview" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop'" />
+          <button type="button" class="preview-btn" onclick="previewImage()">Preview Image</button>
+        </div>
+        <div id="addItemMsg" class="result-msg" style="display:none"></div>
+        <button class="submit-btn" onclick="addMenuItem()">+ Add to Menu</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── EDIT ITEM MODAL ─── -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>✏️ Edit Menu Item</h3>
+      <button class="close-x" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-bdy">
+      <input type="hidden" id="editId" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="editName" />
+        </div>
+        <div class="form-group">
+          <label>Price (Rs.) *</label>
+          <input type="number" id="editPrice" />
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <input type="text" id="editCategory" />
+        </div>
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea id="editDesc" rows="2"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Image URL</label>
+          <input type="url" id="editImage" />
+        </div>
+      </div>
+      <div id="editMsg" class="result-msg" style="display:none"></div>
+      <div style="display:flex;gap:12px;margin-top:16px">
+        <button class="submit-btn" onclick="saveEdit()">💾 Save Changes</button>
+        <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════ FLOATING WHATSAPP BTN ═══════════════════ -->
-<a href="https://wa.me/923000609339" target="_blank" class="whatsapp-float" title="Chat with us on WhatsApp">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-</a>
-
-<!-- ═══════════════════ FOOTER ═══════════════════ -->
-<footer class="footer">
-  <div class="container footer-inner">
-    <div>
-      <div class="footer-brand">🍛 Wee'z Kitchen</div>
-      <p>Model Town Link Road, Lahore, Pakistan</p>
-      <a href="https://wa.me/923000609339" style="color:var(--accent)">+92 300 0609339</a>
-    </div>
-    <div class="footer-hours">
-      <strong>Opening Hours</strong>
-      <p>Monday – Sunday</p>
-      <p>11:00 AM – 11:00 PM</p>
-    </div>
-  </div>
-  <div class="footer-bottom">© 2024 Wee'z Kitchen. All rights reserved.</div>
-</footer>
-
-<script src="script.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
