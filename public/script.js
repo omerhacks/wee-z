@@ -102,18 +102,26 @@ function filterCategory(cat, btn) {
 //  CART
 // ══════════════════════════════════════════════════════════════════════════════
 
-function addToCart(item) {
-  const existing = cart.find(i => i.name === item.name);
+// ══════════════════════════════════════════════════════════════════════════════
+//  CART (FIXED)
+// ══════════════════════════════════════════════════════════════════════════════
+
+function addToCart(itemId) {
+  const item = allMenuItems.find(i => i.id === itemId);
+  if (!item) return;
+
+  const existing = cart.find(i => i.id === itemId);
 
   if (existing) {
     existing.quantity += 1;
   } else {
-    cart.push({ ...item, quantity: 1 });
+    cart.push({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: 1
+    });
   }
-
-  saveCart();
-  renderCart();
-}
 
   updateCartUI();
   updateAddBtnState(itemId);
@@ -123,17 +131,21 @@ function addToCart(item) {
 function changeQty(itemId, delta) {
   const idx = cart.findIndex(c => c.id === itemId);
   if (idx === -1) return;
+
   cart[idx].quantity += delta;
+
   if (cart[idx].quantity <= 0) {
     cart.splice(idx, 1);
-    updateAddBtnState(itemId);
   }
+
+  updateAddBtnState(itemId);
   updateCartUI();
 }
 
 function updateAddBtnState(itemId) {
   const btn = document.getElementById(`addBtn-${itemId}`);
   if (!btn) return;
+
   const inCart = cart.find(c => c.id === itemId);
   btn.textContent = inCart ? '✓ Added' : '+ Add';
   btn.classList.toggle('in-cart', !!inCart);
