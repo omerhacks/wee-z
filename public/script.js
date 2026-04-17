@@ -8,7 +8,7 @@ let allMenuItems = [];   // Full menu from API
 let cart = [];           // Cart items: { id, name, price, quantity }
 let screenshotBase64 = null;
 
-const DELIVERY_FEE = 100;
+const DELIVERY_FEE = 180;
 const WHATSAPP_NUMBER = '923054684924';
 
 // ─── Init ───────────────────────────────────────────────────────────────────
