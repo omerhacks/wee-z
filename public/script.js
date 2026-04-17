@@ -102,16 +102,18 @@ function filterCategory(cat, btn) {
 //  CART
 // ══════════════════════════════════════════════════════════════════════════════
 
-function addToCart(itemId) {
-  const item = allMenuItems.find(i => i.id === itemId);
-  if (!item) return;
+function addToCart(item) {
+  const existing = cart.find(i => i.name === item.name);
 
-  const existing = cart.find(c => c.id === itemId);
   if (existing) {
-    existing.quantity++;
+    existing.quantity += 1;
   } else {
-    cart.push({ id: item.id, name: item.name, price: item.price, quantity: 1 });
+    cart.push({ ...item, quantity: 1 });
   }
+
+  saveCart();
+  renderCart();
+}
 
   updateCartUI();
   updateAddBtnState(itemId);
