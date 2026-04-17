@@ -72,35 +72,54 @@
   </div>
 </section>
 
-<!-- ═══════════════════ CART SIDEBAR ═══════════════════ -->
+<!-- ═══════════════════ CART SIDEBAR (FIXED) ═══════════════════ -->
+
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
 <aside class="cart-sidebar" id="cartSidebar">
+  
+  <!-- Header -->
   <div class="cart-header">
     <h3>🛒 Your Order</h3>
     <button class="close-btn" onclick="toggleCart()">✕</button>
   </div>
+
+  <!-- Items -->
   <div class="cart-items" id="cartItems">
-    <div class="cart-empty" id="cartEmpty">
+    
+    <!-- Empty State -->
+    <div class="cart-empty" id="cartEmpty" style="display: block;">
       <div style="font-size:3rem">🍽️</div>
       <p>Your cart is empty</p>
       <small>Add some delicious items to get started!</small>
     </div>
+
   </div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
+
+  <!-- Footer -->
+  <div class="cart-footer" id="cartFooter" style="display: none;">
+    
     <div class="cart-total-row">
       <span>Subtotal</span>
       <span id="cartSubtotal">Rs. 0</span>
     </div>
-    <div class="cart-total-row delivery-row" id="deliveryFeeRow" style="display:none">
+
+    <div class="cart-total-row delivery-row" id="deliveryFeeRow" style="display: none;">
       <span>Delivery Fee</span>
       <span>Rs. 100</span>
     </div>
+
     <div class="cart-total-row total-row">
       <span>Total</span>
       <span id="cartTotal">Rs. 0</span>
     </div>
-    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+
+    <button class="checkout-btn" onclick="openCheckout()">
+      Proceed to Checkout →
+    </button>
+
   </div>
+
 </aside>
 
 <!-- ═══════════════════ CHECKOUT MODAL ═══════════════════ -->
