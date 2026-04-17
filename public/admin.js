@@ -1,13 +1,11 @@
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 app.use(express.json());
 app.use(express.static('public'));
 
 // ─── FILE PATHS ─────────────────────────────────────────────
 const MENU_FILE = 'menu.json';
 const ORDERS_FILE = 'orders.json';
-
 // ─── HELPERS ────────────────────────────────────────────────
 function readJSON(file) {
   if (!fs.existsSync(file)) return [];
@@ -16,7 +14,6 @@ function readJSON(file) {
 function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
-
 // ─── SIMPLE TOKEN SYSTEM ────────────────────────────────────
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "1234";
@@ -29,11 +26,9 @@ function checkAuth(req, res, next) {
   }
   next();
 }
-
 // ════════════════════════════════════════════════════════════
 //  AUTH
 // ════════════════════════════════════════════════════════════
-
 app.post('/admin/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -43,32 +38,25 @@ app.post('/admin/login', (req, res) => {
     res.json({ success: false, message: "Invalid credentials" });
   }
 });
-
 // ════════════════════════════════════════════════════════════
 //  MENU ROUTES
 // ════════════════════════════════════════════════════════════
-
 // Get menu
 app.get('/menu', (req, res) => {
   const menu = readJSON(MENU_FILE);
   res.json({ data: menu });
 });
-
 // Add item
 app.post('/admin/menu', checkAuth, (req, res) => {
   const menu = readJSON(MENU_FILE);
-
   const newItem = {
     id: Date.now(),
     ...req.body
   };
-
   menu.push(newItem);
   writeJSON(MENU_FILE, menu);
-
   res.json({ success: true });
 });
-
 // Update item
 app.put('/admin/menu/:id', checkAuth, (req, res) => {
   let menu = readJSON(MENU_FILE);
